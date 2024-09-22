@@ -13,11 +13,13 @@ const Question: React.FC<QuestionProps> = ({ question, options, onSelect }) => {
     <View style={styles.container}>
       <Text style={styles.question}>{question}</Text>
       {options.map((option, index) => (
-        <Button
-          key={index}
-          title={option.text}
-          onPress={() => onSelect(option)}
-        />
+        <View  key={index} style={styles.buttonContainer}>
+          <Button
+            key={index}
+            title={option.text}
+            onPress={() => onSelect(option)}
+          />
+          </View>
       ))}
     </View>
   );
@@ -33,6 +35,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
   },
+  buttonContainer: {
+    marginTop: 8, 
+  }
 });
 
 export default Question;
