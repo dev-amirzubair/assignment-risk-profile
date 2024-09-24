@@ -1,8 +1,7 @@
 import React from 'react';
-import {View, Text, Button, StyleSheet} from 'react-native';
+import {View, Text, Button, StyleSheet, TouchableOpacity} from 'react-native';
 import {Option} from '../store/QuestionSlice/QuestionSlice';
 import Colors from '../typogrphy/colors';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 type QuestionProps = {
   question: string;
