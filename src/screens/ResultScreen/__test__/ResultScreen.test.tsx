@@ -6,7 +6,7 @@ describe('Helper Functions', () => {
     expect(getRiskCategory(40)).toBe('Medium');
     expect(getRiskCategory(70)).toBe('High');
   });
-
+gti 
   it('should calculate total score correctly', () => {
     const answers = [
       { text: 'Short Term', points: 10 },

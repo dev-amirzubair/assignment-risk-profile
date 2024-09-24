@@ -5,7 +5,7 @@ import { RootState } from '../store';
 export type Option = {
   text: string;
   points: number;
-};
+} | null;
 
 export type Question = {
   id: number;
@@ -62,8 +62,20 @@ export const questionsSlice = createSlice({
     ) => {
       const { questionIndex, selectedOption } = action.payload;
       state.answers[questionIndex] = selectedOption;
-      state.score += selectedOption.points;
+      state.score += selectedOption?.points || 0;
       state.currentQuestionIndex += 1;
+    },
+    goBack: (state) => {
+      // Only go back if we aren't at the first question
+      if (state.currentQuestionIndex > 0) {
+        state.currentQuestionIndex -= 1;
+        // Optionally adjust score when going back
+        const previousAnswer = state.answers[state.currentQuestionIndex];
+        if (previousAnswer) {
+          state.score -= previousAnswer?.points || 0;
+          state.answers[state.currentQuestionIndex] = null; // Clear the previous answer
+        }
+      }
     },
     resetQuiz: (state) => {
       state.currentQuestionIndex = 0;
@@ -74,7 +86,7 @@ export const questionsSlice = createSlice({
 });
 
 // Export actions and selectors
-export const { setAnswer, resetQuiz } = questionsSlice.actions;
+export const { setAnswer, goBack, resetQuiz } = questionsSlice.actions;
 
 export const selectQuestions = (state: RootState) => state.questions.questions;
 export const selectCurrentQuestionIndex = (state: RootState) =>
