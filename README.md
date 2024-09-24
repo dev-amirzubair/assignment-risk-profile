@@ -46,6 +46,66 @@ If everything is set up _correctly_, you should see your new app running in your
 
 This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
 
+Here’s the complete answer formatted properly for a README file:
+
+## Running iOS Code on M1 Macs
+
+To ensure compatibility with M1 Macs when running iOS code, follow these steps:
+
+### 1. Install Rosetta 2 (if not installed)
+Some dependencies still require Rosetta 2 for compatibility with x86 architecture:
+
+```bash
+softwareupdate --install-rosetta
+```
+
+### 2. Update React Native to the Latest Version
+Ensure you're using the latest stable version of React Native to prevent compatibility issues:
+
+```bash
+npm install react-native@latest
+```
+
+### 3. Modify the Podfile for Apple Silicon Support
+Open the `ios/Podfile` and add the following lines to exclude the `arm64` architecture for iOS simulators on M1 Macs:
+
+```ruby
+platform :ios, '11.0'
+
+post_install do |installer|
+  installer.pods_project.build_configurations.each do |config|
+    config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+  end
+end
+```
+
+This prevents the build from targeting `arm64` architecture for the iOS simulator.
+
+### 4. Install iOS Dependencies Using CocoaPods
+Navigate to the `ios` directory and run:
+
+```bash
+cd ios
+arch -x86_64 pod install
+```
+
+This ensures that CocoaPods runs under Rosetta, which may still be required for some dependencies.
+
+### 5. Configure Xcode for M1 Compatibility
+- Open your project in Xcode by navigating to `ios/<YourProjectName>.xcworkspace`.
+- In **Build Settings**, search for **Excluded Architectures**.
+- Ensure that `arm64` is added under **Any iOS Simulator SDK** to prevent simulator issues on M1.
+
+### 6. Run the App on the iOS Simulator
+Finally, run the app using the following command:
+
+```bash
+npx react-native run-ios
+```
+
+This will launch the iOS simulator and run your app. Make sure that everything works as expected on both Intel and M1 Macs.
+
+
 ## Congratulations! :tada:
 
 You've successfully run and modified your React Native App. :partying_face:
